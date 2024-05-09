@@ -37,4 +37,4 @@ def setup_module(module):
     filename = "./Coding\ With\ Python/Test_Sequence2"
     with open(filename, 'w') as f:
         f.write(">Test Sequence\n")
-        f.write("ATCGATCGatcgatcg\n")  # Only valid characters
+        f.write("ATCGATCGatcgatcg\n")  # Only valid characters ACTG and actg
