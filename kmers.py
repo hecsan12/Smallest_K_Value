@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import sys
 
 def find_kmers(sequence, k):
@@ -16,18 +14,14 @@ def find_kmers(sequence, k):
     dict: A dictionary of k-mers and their subsequent k-mers.
     """
     kmers = {}
-    length = len(sequence)
-    for i in range(length - k + 1):
-        kmer = sequence[i:i + k]
-        if i + k < length:
-            next_kmer = sequence[i + 1:i + 1 + k]
-            if kmer in kmers:
-                kmers[kmer].add(next_kmer)
-            else:
-                kmers[kmer] = {next_kmer}
+    for i in range(len(sequence) - k):
+        kmer = sequence[i:i+k]
+        next_kmer = sequence[i+1:i+k+1]
+        if kmer in kmers:
+            kmers[kmer].add(next_kmer)
+        else:
+            kmers[kmer] = {next_kmer}
     return kmers
-
-
 
 def process_file(filename, k):
     """
@@ -71,12 +65,9 @@ def find_smallest_unique_k(filename):
         all_kmers = process_file(filename, k)
         if all(len(v) == 1 for v in all_kmers.values()):
             return k
-        if not all_kmers:  # No k-mers were found, probably k is too large
+        if k > 50:  # Assume no k larger than 50 needs to be checked
             return -1
         k += 1
-    return -1
-
-
 
 def main():
     """
@@ -89,7 +80,6 @@ def main():
     filename = sys.argv[1]
     smallest_k = find_smallest_unique_k(filename)
     print(f"The smallest k with a unique subsequent k-mer for each k-mer is: {smallest_k}")
-
 
 if __name__ == "__main__":
     main()
