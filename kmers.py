@@ -1,32 +1,32 @@
 import sys
 
-def find_kmers(sequence, k):
+def kmers_value(seq, k):
     """
     This function takes a DNA sequence and an integer k, and returns a dictionary where
     each key is a k-mer (substring of length k) from the sequence, and each value is a set of
     unique k-mers that immediately follow the key k-mer in the sequence.
 
     Args:
-    sequence (str): The DNA sequence.
+    seq (str): The DNA sequence.
     k (int): The length of the k-mers.
 
     Returns:
     dict: A dictionary of k-mers and their subsequent k-mers.
     """
     kmers = {}
-    for i in range(len(sequence) - k):
-        kmer = sequence[i:i+k]
-        next_kmer = sequence[i+1:i+k+1]
+    for i in range(len(seq) - k):
+        kmer = seq[i:i+k]
+        next_kmer = seq[i+1:i+k+1]
         if kmer in kmers:
             kmers[kmer].add(next_kmer)
         else:
             kmers[kmer] = {next_kmer}
     return kmers
 
-def process_file(filename, k):
+def file_acquisition(filename, k):
     """
     This function reads multiple DNA sequences from a file, computes the k-mers for each sequence
-    using find_kmers function, and aggregates them into a single dictionary.
+    using kmers_value function, and aggregates them into a single dictionary.
 
     Args:
     filename (str): The path to the file containing DNA sequences.
@@ -40,8 +40,8 @@ def process_file(filename, k):
         for line in file:
             if line.startswith(">"):
                 continue
-            sequence = line.strip()
-            kmers = find_kmers(sequence, k)
+            seq = line.strip()
+            kmers = kmers_value(seq, k)
             for kmer, next_kmers in kmers.items():
                 if kmer in all_kmers:
                     all_kmers[kmer].update(next_kmers)
@@ -62,7 +62,7 @@ def find_smallest_unique_k(filename):
     """
     k = 1
     while True:
-        all_kmers = process_file(filename, k)
+        all_kmers = file_acquisition(filename, k)
         if all(len(v) == 1 for v in all_kmers.values()):
             return k
         if k > 50:  # Assume no k larger than 50 needs to be checked
